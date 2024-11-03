@@ -7,5 +7,6 @@ WITH SellerSales AS (
 SELECT s.seller_id AS Seller_ID,g.geolocation_city AS Region,ss.Total_Orders,ss.Total_Sales
 FROM SellerSales AS ss
 JOIN sellers_dataset AS s ON ss.seller_id = s.seller_id
+LEFT JOIN geolocation_dataset AS g ON s.seller_zip_code_prefix = g.geolocation_zip_code_prefix
 ORDER BY Region, Total_Sales DESC;
 
