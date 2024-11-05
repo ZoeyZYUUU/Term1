@@ -56,10 +56,8 @@
    - Create summary reports showing sales trends, and customer behavior, and review distribution.
    - Use SQL for group aggregation, conduct multi-dimensional analysis of orders, products, and customers, and visualize results using Power BI or other BI tools.
 
-## ETL
-We have folder ETL_Utils where I create data marts for filtered customers from Rio de Janeiro and an ETL event, which runs daily and provides us with high-value customers.
 
-### Summary
+### Summary(SQL Analytics Problems Hypothesis)
 
 1. Best-Selling Product Categories and Regions:  
    - Identify product categories and regions with the highest sales volume and revenue to assist in strategic market targeting.
@@ -72,6 +70,9 @@ We have folder ETL_Utils where I create data marts for filtered customers from R
 
 4. Product Improvement Suggestions:  
    - Improve service or product quality through low-score data analysis.
+
+## ETL
+We have folder ETL_Utils where I create data marts for filtered customers from Rio de Janeiro and an ETL event, which runs daily and provides us with high-value customers.
 
 
 ### Source
