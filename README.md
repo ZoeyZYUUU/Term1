@@ -1,9 +1,16 @@
 # Repository for Data Engineering 1
 
+## Setup 
+1. Following the provided [course materials](https://ceu-economics-and-business.github.io/ECBS-5146-Different-Shapes-of-Data/01-intro/index.html) I created the database
+2. To populate the database I used the [brazilian e-commerce dataset](https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce) from Kaggle 
+3. Download the dataset and put the tables into change the paths in the Build_Database.sql file accordingly
+4. Run Build_Database.sql
+
 
 ## Analytics Planning
 
-### Document Overview
+
+### Dataset Downloaded File Overview
 
 1. `olist_sellers_dataset.csv`
 2. `product_category_name_translation.csv`
@@ -46,8 +53,11 @@
    - Segment customer groups by region and behavior to identify market needs in different regions.
 
 5. Report Generation and Visualization:  
-   - Create summary reports showing sales trends, customer behavior, and review distribution.
+   - Create summary reports showing sales trends, and customer behavior, and review distribution.
    - Use SQL for group aggregation, conduct multi-dimensional analysis of orders, products, and customers, and visualize results using Power BI or other BI tools.
+
+## ETL
+We have folder ETL_Utils where I create data marts for filtered customers from Rio de Janeiro and an ETL event, which runs daily and provides us with high-value customers.
 
 ### Summary
 
@@ -65,6 +75,6 @@
 
 
 ### Source
-taken from kaggle dataset 
+taken from Kaggle dataset 
 https://www.kaggle.com/datasets/olistbr/brazilian-ecommerce
 
