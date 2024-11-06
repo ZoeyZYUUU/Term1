@@ -127,8 +127,6 @@ SET order_purchase_timestamp = NULLIF(@order_purchase_timestamp, ''),
     order_estimated_delivery_date = NULLIF(@order_estimated_delivery_date, '');
 
 
-
-# change the file path to where you downloaded the dataset tables
 LOAD DATA INFILE '/private/tmp/brazil_database/olist_order_items_dataset.csv' 
 INTO TABLE order_items_dataset 
 FIELDS TERMINATED BY ',' 
