@@ -25,7 +25,7 @@ CREATE TABLE Materialized_SalesDataMart (
 
 
 
-# update my Materialized_SalesDataMart table per hour
+# Update my Materialized_SalesDataMart table per hour
 DELIMITER $$
 
 CREATE EVENT RefreshMaterializedSalesDataMart
@@ -49,6 +49,52 @@ DO
     END$$
 
 DELIMITER ;
+
+
+# Create a transformation stored procedure TransformSales
+DELIMITER $$
+
+CREATE PROCEDURE TransformSales()
+BEGIN
+    UPDATE extracted_sales
+    SET order_status = LOWER(order_status),
+        order_purchase_timestamp = COALESCE(order_purchase_timestamp, NOW());
+END$$
+
+DELIMITER ;
+
+
+DROP TABLE IF EXISTS Materialized_SalesDataMart;
+
+
+# Create the target table Materialized_SalesDataMart
+CREATE TABLE Materialized_SalesDataMart (
+    order_id VARCHAR(50),
+    customer_id VARCHAR(50),
+    order_status VARCHAR(20),
+    order_purchase_timestamp DATETIME,
+    total_revenue DECIMAL(10,2),
+    PRIMARY KEY (order_id)
+);
+
+
+
+# Create the load stored procedure LoadSales
+DELIMITER $$
+
+CREATE PROCEDURE LoadSales()
+BEGIN
+    INSERT INTO Materialized_SalesDataMart (order_id, customer_id, order_status, order_purchase_timestamp, total_revenue)
+    SELECT order_id, customer_id, order_status, order_purchase_timestamp, total_revenue
+    FROM extracted_sales;
+
+    DELETE FROM extracted_sales;
+END$$
+
+DELIMITER ;
+
+
+
 
 
 

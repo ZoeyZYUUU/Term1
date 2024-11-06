@@ -22,7 +22,7 @@ CREATE TABLE Materialized_ProductPerformanceDataMart (
 
 
 
-# update my Materialized_ProductPerformanceDataMart table per hour
+# Update my Materialized_ProductPerformanceDataMart table per hour
 DELIMITER $$
 
 CREATE EVENT RefreshMaterializedProductPerformanceDataMart
@@ -45,6 +45,53 @@ DO
     END$$
 
 DELIMITER ;
+
+
+# Create a transformation stored procedure TransformProducts
+DELIMITER $$
+
+CREATE PROCEDURE TransformProducts()
+BEGIN
+    UPDATE extracted_products
+    SET product_category_name = LOWER(product_category_name);
+END$$
+
+DELIMITER ;
+
+
+DROP TABLE IF EXISTS Materialized_ProductPerformanceDataMart;
+
+
+# Create a target table Materialized_ProductPerformanceDataMart
+CREATE TABLE Materialized_ProductPerformanceDataMart (
+    product_id VARCHAR(50),
+    product_category_name VARCHAR(50),
+    avg_rating DECIMAL(3,2),
+    sales_count INT,
+    total_revenue DECIMAL(10,2),
+    PRIMARY KEY (product_id)
+);
+
+
+
+# Create the load stored procedure LoadProducts
+DELIMITER $$
+
+CREATE PROCEDURE LoadProducts()
+BEGIN
+    INSERT INTO Materialized_ProductPerformanceDataMart (product_id, product_category_name, avg_rating, sales_count, total_revenue)
+    SELECT product_id, product_category_name, AVG(avg_rating), SUM(sales_count), SUM(total_revenue)
+    FROM extracted_products
+    GROUP BY product_id;
+
+    DELETE FROM extracted_products;
+END$$
+
+DELIMITER ;
+
+
+
+
 
 
 

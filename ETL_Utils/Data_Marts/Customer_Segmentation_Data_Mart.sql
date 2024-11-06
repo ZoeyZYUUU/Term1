@@ -21,7 +21,7 @@ CREATE TABLE Materialized_CustomerSegmentationDataMart (
 );
 
 
-# update my Materialized_CustomerSegmentationDataMart table per hour
+# Update my Materialized_CustomerSegmentationDataMart table per hour
 DELIMITER $$
 
 CREATE EVENT RefreshMaterializedCustomerSegmentationDataMart
@@ -44,5 +44,56 @@ DO
     END$$
 
 DELIMITER ;
+
+
+# Create transformation stored procedure TransformCustomers
+DELIMITER $$
+
+CREATE PROCEDURE TransformCustomers()
+BEGIN
+    UPDATE extracted_customers
+    SET customer_city = UPPER(customer_city);
+END$$
+
+DELIMITER ;
+
+
+DROP TABLE IF EXISTS Materialized_CustomerSegmentationDataMart;
+
+
+# Create a target table Materialized_CustomerSegmentationDataMart
+CREATE TABLE Materialized_CustomerSegmentationDataMart (
+    customer_id VARCHAR(50),
+    customer_city VARCHAR(100),
+    recency INT,
+    frequency INT,
+    monetary DECIMAL(10,2),
+    PRIMARY KEY (customer_id)
+);
+
+DELIMITER $$
+
+
+# Create the load stored procedure LoadCustomers
+DELIMITER $$
+
+CREATE PROCEDURE LoadCustomers()
+BEGIN
+    INSERT INTO Materialized_CustomerSegmentationDataMart (customer_id, customer_city, recency, frequency, monetary)
+    SELECT customer_id, customer_city, MIN(recency), SUM(frequency), SUM(monetary)
+    FROM extracted_customers
+    GROUP BY customer_id;
+    
+    DELETE FROM extracted_customers;
+END$$
+
+DELIMITER ;
+
+
+
+
+
+
+
 
 
